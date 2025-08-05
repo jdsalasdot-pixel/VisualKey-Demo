@@ -114,7 +114,8 @@ if st.session_state.token_valid and st.session_state.playing and st.session_stat
     with st.expander(f"🔊 Paso 3: Reproducción en Modo {st.session_state.mode}", expanded=True):
         # Simulación de video
         video_url = "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"  # Video de prueba corto y público
-        st.video(video_url, caption="Reproducción simulada del contenido protegido")
+        st.video(video_url)
+        st.caption("Reproducción simulada del contenido protegido")
         
         # Preview de watermark
         wm_text = f"ID: {st.session_state.watermark_id}"
