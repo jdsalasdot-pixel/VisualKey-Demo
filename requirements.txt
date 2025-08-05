@@ -1,0 +1,2 @@
+streamlit==1.37.1  # Versión actual al 04/08/2025; verifica en pypi.org.
+pillow==10.4.0     # Para PIL (watermark).
