@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 from datetime import datetime
 import random
@@ -161,4 +160,3 @@ if st.session_state.log:
     st.download_button("📥 Download Log", log_text.encode('utf-8'), file_name="visualkey_audit_log.txt")
 else:
     st.info("No events logged yet. Start the flow.")
-```
