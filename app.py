@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 from datetime import datetime
 import random
@@ -56,41 +57,41 @@ st.set_page_config(page_title="VisualKey Prototype", page_icon="🎬", layout="w
 
 # Sidebar for demo info
 st.sidebar.title("VisualKey Demo")
-st.sidebar.info("Prototipo para protección de contenido audiovisual. Flujo secuencial: Escaneo de entorno → Validación de token → Reproducción segura → Simulación de piratería (opcional) → Logs.")
-st.sidebar.markdown("Desarrollado por Juan Diego Salas Rueda, Agosto 2025.")
+st.sidebar.info("Prototype for audiovisual content protection. Sequential flow: Environment Scan → Token Validation → Secure Playback → Optional Piracy Simulation → Logs.")
+st.sidebar.markdown("Developed by Juan Diego Salas Rueda, August 2025.")
 
 # Main title
-st.title("🎬 VisualKey – Prototipo de Playback Seguro Adaptativo")
+st.title("🎬 VisualKey – Adaptive Secure Playback Prototype")
 
-# Paso 1: Escaneo de Entorno (siempre primero)
-with st.expander("🔍 Paso 1: Escaneo Inicial de Entorno del Dispositivo", expanded=not st.session_state.adaptive_ready):
+# Step 1: Environment Scan (always first)
+with st.expander("🔍 Step 1: Initial Device Environment Scan", expanded=not st.session_state.adaptive_ready):
     if not st.session_state.adaptive_ready:
-        option = st.selectbox("Selecciona entorno simulado:", [
-            "Dispositivo Seguro Verificado (e.g., sistema registrado en casa)",
-            "Wi-Fi Hogar Confiable",
-            "VPN / Red Desconocida"
+        option = st.selectbox("Select simulated environment:", [
+            "Verified Secure Device (e.g., registered home system)",
+            "Trusted Home Wi-Fi",
+            "VPN / Unknown Network"
         ])
-        if st.button("Ejecutar Escaneo de Entorno"):
-            if "Seguro" in option:
+        if st.button("Run Environment Scan"):
+            if "Secure" in option:
                 st.session_state.environment = "Premium"
-            elif "Hogar" in option:
+            elif "Home" in option:
                 st.session_state.environment = "Standard"
             else:
                 st.session_state.environment = "Compatibility"
             st.session_state.adaptive_ready = True
-            st.session_state.log.append(f"{timestamp()}: Entorno detectado → {st.session_state.environment}")
-            st.success(f"Entorno detectado: **{st.session_state.environment}**. Procede a autenticación.")
+            st.session_state.log.append(f"{timestamp()}: Environment detected → {st.session_state.environment}")
+            st.success(f"Environment detected: **{st.session_state.environment}**. Proceed to authentication.")
             st.rerun()
 
-# Paso 2: Validación de Token (después del entorno)
+# Step 2: Token Validation (after environment)
 if st.session_state.adaptive_ready and not st.session_state.token_valid:
-    with st.expander("🔐 Paso 2: Autenticación de Acceso", expanded=True):
-        st.info(f"Modo de Entorno Detectado: **{st.session_state.environment}**. Ingresa un token compatible o inferior.")
-        token_input = st.text_input("Ingresa tu token de acceso:", type="password")
-        if st.button("Validar e Iniciar Reproducción"):
+    with st.expander("🔐 Step 2: Access Authentication", expanded=True):
+        st.info(f"Detected Environment Mode: **{st.session_state.environment}**. Enter a compatible or lower token.")
+        token_input = st.text_input("Enter your access token:", type="password")
+        if st.button("Validate and Start Playback"):
             expected_mode = st.session_state.environment
             if token_input.strip() == "":
-                st.warning("Ingresa un token válido.")
+                st.warning("Enter a valid token.")
             elif token_input in VALID_TOKENS:
                 token_mode = VALID_TOKENS[token_input]
                 allowed_modes = ["Premium", "Standard", "Compatibility"]
@@ -99,64 +100,65 @@ if st.session_state.adaptive_ready and not st.session_state.token_valid:
                     st.session_state.mode = token_mode
                     st.session_state.watermark_id = generate_watermark_id()
                     st.session_state.playing = True
-                    st.session_state.log.append(f"{timestamp()}: Token válido '{token_input}' aceptado para modo {token_mode}")
-                    st.session_state.log.append(f"{timestamp()}: ID de Watermark generado = {st.session_state.watermark_id}")
-                    st.success("Acceso concedido. Iniciando reproducción.")
+                    st.session_state.log.append(f"{timestamp()}: Valid token '{token_input}' accepted for mode {token_mode}")
+                    st.session_state.log.append(f"{timestamp()}: Watermark ID generated = {st.session_state.watermark_id}")
+                    st.success("Access granted. Starting playback.")
                     st.rerun()
                 else:
-                    st.error("Nivel de token excede el entorno permitido. Usa un token inferior.")
+                    st.error("Token level exceeds allowed environment. Use a lower token.")
             else:
-                st.session_state.log.append(f"{timestamp()}: Intento de token inválido – {token_input}")
-                st.error("Token inválido. Intenta nuevamente.")
+                st.session_state.log.append(f"{timestamp()}: Invalid token attempt – {token_input}")
+                st.error("Invalid token. Try again.")
 
-# Paso 3: Sesión de Reproducción (con simulación de piratería opcional)
+# Step 3: Playback Session (with optional piracy simulation)
 if st.session_state.token_valid and st.session_state.playing and st.session_state.mode:
-    with st.expander(f"🔊 Paso 3: Reproducción en Modo {st.session_state.mode}", expanded=True):
-        # Simulación de video
-        video_url = "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"  # Video de prueba corto y público
+    with st.expander(f"🔊 Step 3: Playback in {st.session_state.mode} Mode", expanded=True):
+        # Simulated video
+        video_url = "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"  # Short public test video
         st.video(video_url)
-        st.caption("Reproducción simulada del contenido protegido")
+        st.caption("Simulated playback of protected content")
         
-        # Preview de watermark
+        # Watermark preview
         wm_text = f"ID: {st.session_state.watermark_id}"
         frame_img = create_watermark_image(wm_text, st.session_state.mode)
-        st.image(frame_img, caption="Vista Previa de Watermark Forense (invisible en producción real)", use_column_width=True)
+        st.image(frame_img, caption="Forensic Watermark Preview (invisible in real production)", use_column_width=True)
         
-        # Simulación de piratería opcional
-        st.subheader("Simula Ataques de Piratería (Opcional)")
+        # Optional piracy simulation
+        st.subheader("Simulate Piracy Attacks (Optional)")
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("🔌 Simular Intento de Copia HDMI"):
+            if st.button("🔌 Simulate HDMI Copy Attempt"):
                 st.session_state.playing = False
-                st.session_state.log.append(f"{timestamp()}: ⚠️ Ataque HDMI detectado. Reproducción detenida.")
-                st.error("Salida HDMI no autorizada. Sesión terminada.")
+                st.session_state.log.append(f"{timestamp()}: ⚠️ HDMI attack detected. Playback stopped.")
+                st.error("Unauthorized HDMI output. Session terminated.")
                 st.rerun()
         with col2:
-            if st.button("📼 Simular Grabación de Pantalla"):
+            if st.button("📼 Simulate Screen Recording"):
                 st.session_state.playing = False
-                st.session_state.log.append(f"{timestamp()}: ⚠️ Grabador de pantalla detectado. Reproducción detenida.")
-                st.error("Grabación detectada. Sesión terminada.")
+                st.session_state.log.append(f"{timestamp()}: ⚠️ Screen recorder detected. Playback stopped.")
+                st.error("Recording detected. Session terminated.")
                 st.rerun()
         
-        # Métricas mock para demo profesional
-        st.metric("Tiempo de Validación Simulado", "0.3 seg", "Escalable a millones de sesiones con inversión")
+        # Mock metrics for professional demo
+        st.metric("Simulated Validation Time", "0.3 sec", "Scalable to millions of sessions with investment")
 
-# Paso Final: Si reproducción termina
+# Final Step: If playback ends
 if st.session_state.token_valid and not st.session_state.playing:
-    with st.expander("🏁 Sesión Finalizada", expanded=True):
-        st.warning("Sesión de reproducción terminada. Revisa los logs abajo.")
-        if st.button("Reiniciar Aplicación"):
+    with st.expander("🏁 Session Ended", expanded=True):
+        st.warning("Playback session ended. Check logs below.")
+        if st.button("Reset Application"):
             for key in ['adaptive_ready', 'environment', 'token_valid', 'playing', 'mode', 'watermark_id']:
                 st.session_state[key] = False if key in ['adaptive_ready', 'token_valid', 'playing'] else None
-            st.session_state.log = []  # Limpiar logs para reinicio completo
+            st.session_state.log = []  # Clear logs for full reset
             st.rerun()
 
-# Audit Log: Siempre al final, actualizado en vivo
+# Audit Log: Always at the end, live updated
 st.markdown("---")
-st.subheader("📑 Registro de Auditoría")
+st.subheader("📑 Audit Log")
 if st.session_state.log:
     log_text = "\n".join(st.session_state.log)
-    st.text_area("Eventos de Sesión:", log_text, height=200)
-    st.download_button("📥 Descargar Log", log_text.encode('utf-8'), file_name="visualkey_audit_log.txt")
+    st.text_area("Session Events:", log_text, height=200)
+    st.download_button("📥 Download Log", log_text.encode('utf-8'), file_name="visualkey_audit_log.txt")
 else:
-    st.info("No hay eventos registrados aún. Inicia el flujo.")
+    st.info("No events logged yet. Start the flow.")
+```
